@@ -21,6 +21,22 @@ model Route {
   directions  Json // This is a JSON column that will save the directions from Google Maps API
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt // updateAt is a column that is updated automatically
+  RouteDriver RouteDriver[]
+}
+
+model RouteDriver {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  route Route  @relation(fields: [route_id], references: [id])
+  route_id String @db.ObjectId @unique
+  points Point[]
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt 
+  //status - started, finished //Could be used to track the status of the route
+}
+
+type Point {
+  location Coord
+  created_at  DateTime @default(now())
 }
 
 type Place {

@@ -43,6 +43,7 @@ npx nest generate controller maps/places
 npx nest generate service maps/places
 npx nest generate controller maps/directions
 npx nest generate service maps/directions
+npx nest generate service routes/routes-driver
 ```
 
 #### Usage

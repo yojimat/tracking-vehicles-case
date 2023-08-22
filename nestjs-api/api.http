@@ -24,5 +24,6 @@ GET http://localhost:3000/places?text=Simpsons - SHIGS 706 Bl. D, Loja 35 - Asa 
 ### Get second place_id
 GET http://localhost:3000/places?text=Brasília Shopping - Asa Norte, Brasilia - Federal District
 
-### Get directions between two places
+### Get directions between two places, this will not be utilized by the interface
+### TODO: Remove this endpoint
 GET http://localhost:3000/directions?originId=ChIJlWcrdLg6WpMR9aiAqdCC11g&destinationId=ChIJbVO40fs6WpMRjLuC-AD-i4E
