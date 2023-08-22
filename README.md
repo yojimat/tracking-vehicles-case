@@ -31,13 +31,18 @@ Commands used to bootstrap the project.
 ```bash
 npm install -g @nestjs/cli
 nest new nestjs-api
-cd nestjs-api
+cd nestjs-api 
 npm install @prisma/client
 npx prisma init #Change the .env file the prisma file.
 npx prisma generate # This command must be executed with the db running.
 npx nest generate module prisma
 npx nest generate service prisma
 npx nest generate resource # Create the CRUD of routes.
+npx nest generate module maps
+npx nest generate controller maps/places
+npx nest generate service maps/places
+npx nest generate controller maps/directions
+npx nest generate service maps/directions
 ```
 
 #### Usage
