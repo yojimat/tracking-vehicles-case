@@ -12,8 +12,8 @@ Content-Type: application/json
 
 {
   "name": "route test 1",
-  "source_id": "1",
-  "destination_id": "2"
+  "source_id": "ChIJlWcrdLg6WpMR9aiAqdCC11g",
+  "destination_id": "ChIJbVO40fs6WpMRjLuC-AD-i4E"
 }
 
 #### Places from Google Maps
