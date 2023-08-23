@@ -70,6 +70,8 @@ export default function NewRoutePage() {
   }
 
   async function createRoute() {
+    const button = document.getElementById("submitBtn");
+    button?.setAttribute("disabled", "true");
     const startAddress = directionsData!.routes[0].legs[0].start_address;
     const endAddress = directionsData!.routes[0].legs[0].end_address;
 
@@ -79,11 +81,12 @@ export default function NewRoutePage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: `${startAddress} /// ${endAddress}`,
+        name: `${startAddress} >>> ${endAddress}`,
         source_id: directionsData!.request.origin.place_id,
         destination_id: directionsData!.request.destination.place_id,
       }),
     });
+    button?.removeAttribute("disabled");
   }
 
   // Values are hardcoded for simplicity.

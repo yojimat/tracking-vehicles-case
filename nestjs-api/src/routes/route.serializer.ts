@@ -11,7 +11,7 @@ export class RouteSerializer implements Omit<Route, 'directions'> {
       lng: number;
     };
   };
-  destination: { name: string } & { location: { lat: number; lng: number } };
+  destination: { name: string   ,location: { lat: number; lng: number } };
   distance: number;
   duration: number;
   directions: DirectionsResponseData & { request: any };
