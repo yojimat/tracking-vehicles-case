@@ -5,11 +5,14 @@ import type {
   DirectionsResponseData,
   FindPlaceFromTextResponseData,
 } from "@googlemaps/google-maps-services-js";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function NewRoutePage() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useMap(mapContainer);
+  const [directionsData, setDirectionsData] = useState<
+    DirectionsResponseData & { request: any }
+  >();
 
   async function searchPlaces(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -48,6 +51,8 @@ export default function NewRoutePage() {
     const directionsData: DirectionsResponseData & { request: any } =
       await directionsResponse.json();
 
+    setDirectionsData(directionsData);
+
     await map?.addRouteWithIcons({
       routeId: "1",
       startMarkerOptions: {
@@ -63,6 +68,24 @@ export default function NewRoutePage() {
 
     button?.removeAttribute("disabled");
   }
+
+  async function createRoute() {
+    const startAddress = directionsData!.routes[0].legs[0].start_address;
+    const endAddress = directionsData!.routes[0].legs[0].end_address;
+
+    await fetch("http://localhost:3000/routes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: `${startAddress} /// ${endAddress}`,
+        source_id: directionsData!.request.origin.place_id,
+        destination_id: directionsData!.request.destination.place_id,
+      }),
+    });
+  }
+
   // Values are hardcoded for simplicity.
   return (
     <div
@@ -96,9 +119,24 @@ export default function NewRoutePage() {
             placeholder="Destination"
           />
           <button id="submitBtn" type="submit">
-            Create Route
+            Search Route
           </button>
         </form>
+        {directionsData && (
+          <ul>
+            <li>
+              <strong>Start Location</strong>:{" "}
+              {directionsData.routes[0].legs[0].start_address}
+            </li>
+            <li>
+              <strong>Destination</strong>:{" "}
+              {directionsData.routes[0].legs[0].end_address}
+            </li>
+            <li>
+              <button onClick={createRoute}>Create Route</button>
+            </li>
+          </ul>
+        )}
       </div>
       <div
         id="map"
