@@ -1,31 +1,20 @@
 "use client";
+import useMap from "@/hooks/useMap";
 // Importing types, so we can use them in our code, but not load their implementation/behavior in the final js bundle.
-import type { FindPlaceFromTextResponseData } from "@googlemaps/google-maps-services-js";
-import { Loader } from "@googlemaps/js-api-loader";
-import { useEffect } from "react";
+import type {
+  DirectionsResponseData,
+  FindPlaceFromTextResponseData,
+} from "@googlemaps/google-maps-services-js";
+import { useRef } from "react";
 
 export default function NewRoutePage() {
-  useEffect(() => {
-    (async () => {
-      const loader = new Loader({
-        apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-        libraries: ["routes", "geometry"],
-      });
-
-      await Promise.all([
-        loader.importLibrary("routes"),
-        loader.importLibrary("geometry"),
-      ]);
-
-      new google.maps.Map(document.getElementById("map") as any, {
-        zoom: 15,
-        center: { lat: -15.794157, lng: -47.882529 },
-      });
-    })();
-  }, []);
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useMap(mapContainer);
 
   async function searchPlaces(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const button = document.getElementById("submitBtn");
+    button?.setAttribute("disabled", "true");
     const form = event.currentTarget;
     const source = form.source.value;
     const destination = form.destination.value;
@@ -55,9 +44,24 @@ export default function NewRoutePage() {
     const directionsResponse = await fetch(
       `http://localhost:3000/directions?originId=${sourcePlaceId}&destinationId=${destinationPlaceId}`
     );
-    const directionsData = await directionsResponse.json();
 
-    console.log(directionsData);
+    const directionsData: DirectionsResponseData & { request: any } =
+      await directionsResponse.json();
+
+    await map?.addRouteWithIcons({
+      routeId: "1",
+      startMarkerOptions: {
+        position: directionsData.routes[0].legs[0].start_location,
+      },
+      endMarkerOptions: {
+        position: directionsData.routes[0].legs[0].end_location,
+      },
+      carMarkerOptions: {
+        position: directionsData.routes[0].legs[0].start_location,
+      },
+    });
+
+    button?.removeAttribute("disabled");
   }
   // Values are hardcoded for simplicity.
   return (
@@ -91,7 +95,9 @@ export default function NewRoutePage() {
             }
             placeholder="Destination"
           />
-          <button type="submit">Create Route</button>
+          <button id="submitBtn" type="submit">
+            Create Route
+          </button>
         </form>
       </div>
       <div
@@ -100,6 +106,7 @@ export default function NewRoutePage() {
           height: "100%",
           width: "100%",
         }}
+        ref={mapContainer}
       ></div>
     </div>
   );
