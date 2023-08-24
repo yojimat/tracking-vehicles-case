@@ -5,12 +5,13 @@ services:
   #   build: .
   #   ports:
   #     - "3000:3000"
-  #   volumes:
-  #     - .:/home/node/app
+  # depends_on:
+  #     - db
 
-  db: 
+  db:
     container_name: mongodb # The Docker create a DNS for this service, so we can use it as host name.
     image: bitnami/mongodb:5.0.17
+    # Remove the ports option when running inside the container.
     ports:
       - "127.0.0.1:27017:27017"
     volumes:

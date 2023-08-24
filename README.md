@@ -32,6 +32,7 @@ npx create-next-app --typescript
 Start the application:  
 ```bash
 cd nextjs-bff
+npm install
 npm run dev
 ```
 
