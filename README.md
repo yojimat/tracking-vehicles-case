@@ -18,6 +18,7 @@ If the projects had CI/CD they should have their own repositories. Therefore, th
 - [MongoDB](https://docs.mongodb.com/)
 - [Prisma ORM](https://www.prisma.io/docs/)
 - [Google Maps API](https://developers.google.com/maps/documentation)
+- [Material UI](https://material-ui.com/getting-started/installation/)
 
 ## Projects
 ### Vehicles Tracking Interface 
@@ -59,17 +60,15 @@ npx nest generate service maps/places
 npx nest generate controller maps/directions
 npx nest generate service maps/directions
 npx nest generate service routes/routes-driver
+npx nest generate gateway routes/routes-websocket
 ```
 
 #### Usage
 Using the API with Docker Compose:
 ```bash
 cd nestjs-api
-docker compose up
-docker compose exec app bash
-npm install 
-npx prisma generate
-npm run start:dev
+docker compose down --volumes
+docker compose up --build
 ```
 Access http://localhost:3000/routes.  
 There is a file at the root of the project that is called `api.http` that you can use to test the application with the plugin of VSCode called [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).  

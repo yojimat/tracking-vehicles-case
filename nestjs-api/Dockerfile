@@ -9,8 +9,10 @@ RUN apt-get update -y && apt-get install -y openssl \
 
 COPY . . 
 RUN npx prisma generate
+  # && npm run build # Add this step for a production build
 
 EXPOSE 3000
 
 # keep container running
 CMD ["npm", "run", "start:dev"]    
+# CMD ["npm", "run", "start:prod"] // Production build 

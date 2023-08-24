@@ -8,8 +8,7 @@ services:
   # depends_on:
   #     - db
 
-  db:
-    container_name: mongodb # The Docker create a DNS for this service, so we can use it as host name.
+  db: # The Docker create a DNS for this service, so we can use it as host name.
     image: bitnami/mongodb:5.0.17
     # Remove the ports option when running inside the container.
     ports:
