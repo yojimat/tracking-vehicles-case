@@ -19,6 +19,7 @@ If the projects had CI/CD they should have their own repositories. Therefore, th
 - [Prisma ORM](https://www.prisma.io/docs/)
 - [Google Maps API](https://developers.google.com/maps/documentation)
 - [Material UI](https://material-ui.com/getting-started/installation/)
+- [Redis](https://redis.io/documentation)
 
 ## Projects
 ### Vehicles Tracking Interface 

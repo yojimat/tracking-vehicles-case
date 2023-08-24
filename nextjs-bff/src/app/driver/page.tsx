@@ -29,7 +29,9 @@ export default function DriverPage() {
 
   async function startRoute() {
     const button = document.getElementById("submitBtn") as HTMLButtonElement;
+    const select = document.getElementById("route") as HTMLSelectElement;
     button.setAttribute("disabled", "true");
+    select.setAttribute("disabled", "true");
 
     const routeId = (document.getElementById("route") as HTMLSelectElement)
       .value;
@@ -68,6 +70,7 @@ export default function DriverPage() {
       });
     }
     button.removeAttribute("disabled");
+    select.removeAttribute("disabled");
   }
 
   return (
