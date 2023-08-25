@@ -1,24 +1,18 @@
 "use client";
+
+import { RouteSelect } from "@/components/RouteSelect";
 import useMap from "@/hooks/useMap";
-import { fetcher } from "@/utils/http";
 import { Route } from "@/utils/models";
 import { socket } from "@/utils/socket-io";
+import { Button, Typography } from "@mui/material";
+import Grid2 from "@mui/material/Unstable_Grid2";
 import { useEffect, useRef } from "react";
-import useSwr from "swr";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default function DriverPage() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useMap(mapContainer);
-
-  const {
-    data: routes,
-    error,
-    isLoading,
-  } = useSwr<Route[]>("http://localhost:3000/routes", fetcher, {
-    fallbackData: [],
-  });
 
   useEffect(() => {
     socket.connect();
@@ -33,8 +27,7 @@ export default function DriverPage() {
     button.setAttribute("disabled", "true");
     select.setAttribute("disabled", "true");
 
-    const routeId = (document.getElementById("route") as HTMLSelectElement)
-      .value;
+    const routeId = select.value;
     const response = await fetch(`http://localhost:3000/routes/${routeId}`);
     const route: Route = await response.json();
     map?.removeAllRoutes();
@@ -74,39 +67,22 @@ export default function DriverPage() {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <div style={{ width: "25%" }}>
-        <h1>Trip Simulator</h1>
+    <Grid2 container sx={{ display: "flex", flex: 1 }}>
+      <Grid2 xs={4} px={2}>
+        <Typography sx={{mt: 2}} variant="h4">Trip Simulator</Typography>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <select id="route">
-            {isLoading && <option>Loading Routes</option>}
-            {error && <option>Error Loading Routes</option>}
-            {routes!.map((route: Route) => (
-              <option key={route.id} value={route.id}>
-                {route.name}
-              </option>
-            ))}
-          </select>
-          <button id="submitBtn" type="submit" onClick={startRoute}>
+          <RouteSelect />
+          <Button
+            variant="contained"
+            id="submitBtn"
+            sx={{ mt: 2 }}
+            onClick={startRoute}
+          >
             Start Trip
-          </button>
+          </Button>
         </div>
-      </div>
-      <div
-        id="map"
-        style={{
-          height: "100%",
-          width: "100%",
-        }}
-        ref={mapContainer}
-      ></div>
-    </div>
+      </Grid2>
+      <Grid2 id="map" xs={8} ref={mapContainer}></Grid2>
+    </Grid2>
   );
 }
