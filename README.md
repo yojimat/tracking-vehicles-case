@@ -1,10 +1,11 @@
-# Case: Tracking of vehicles
-Projects in this repo will create a platform of tracking of vehicles. The platform will be able to trace the vehicles in real time and store the trace in database. The platform will also be able to provide the tracking of vehicles to other applications.  
-It will caculate vehicles fares based on the distance that the vehicles will travel.  
+# Case: Vehicles Tracking
+Projects in this repo create a vehicles tracking platform. The platform will be able to trace the vehicles in real time and store the trace in database.  
+The platform will also be able to provide the trace of vehicles to other applications.  
+It will calculate vehicles fares based on the distance that vehicles will travel.  
 If the projects had CI/CD they should have their own repositories. Therefore, they could be deployed independently, by git webhooks or other tools.
 
 ## Architecture
-![Tracking Vehicles Architecture](./images/tracking-vehicles-architecture.png "Tracking Vehicles Architecture")  
+![Vehicles Tracking Architecture](./images/vehicles-tracking-architecture.png "Vehicles Tracking Architecture")  
 
 ## Technologies
 - [Docker](https://docs.docker.com/)
@@ -23,7 +24,7 @@ If the projects had CI/CD they should have their own repositories. Therefore, th
 
 ## Projects
 ### Vehicles Tracking Interface 
-The **Next.js** framework show the interface of tracking of vehicles and also is _Backend For FrontEnd_(BFF).  
+The **Next.js** framework show the interface vehicles routes and where they are after the trip started; also is _Backend For FrontEnd_(BFF).  
 
 #### Setup
 Commands used to bootstrap the project.  
@@ -39,7 +40,7 @@ npm run dev
 ```
 
 ### API
-The **Nest.js** framework provide the API of tracking of vehicles and other features.  
+The **Nest.js** framework provide the API for the platform, having features like: Redis as storage for job queues to have better resilience, WebSockets for real time full-duplex communication between the API and BFF.  
 You will need to create a file called `.env` at the root of the project and an account at google to use the maps API like this:  
 `GOOGLE_MAPS_API_KEY = <YOUR_GOOGLE_MAPS_API_KEY>`  
 

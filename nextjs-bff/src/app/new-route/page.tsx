@@ -5,6 +5,20 @@ import type {
   DirectionsResponseData,
   FindPlaceFromTextResponseData,
 } from "@googlemaps/google-maps-services-js";
+import {
+  Alert,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  List,
+  ListItem,
+  ListItemText,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@mui/material";
+import Grid2 from "@mui/material/Unstable_Grid2";
 import { useRef, useState } from "react";
 
 export default function NewRoutePage() {
@@ -13,6 +27,7 @@ export default function NewRoutePage() {
   const [directionsData, setDirectionsData] = useState<
     DirectionsResponseData & { request: any }
   >();
+  const [open, setOpen] = useState(false);
 
   async function searchPlaces(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -86,69 +101,96 @@ export default function NewRoutePage() {
         destination_id: directionsData!.request.destination.place_id,
       }),
     });
+    setOpen(true)
     button?.removeAttribute("disabled");
   }
 
   // Values are hardcoded for simplicity.
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <div>
-        <h1>New Route</h1>
-        <form
-          onSubmit={searchPlaces}
-          style={{ display: "flex", flexDirection: "column" }}
-        >
-          <input
+    <Grid2 container sx={{ display: "flex", flex: 1 }}>
+      <Grid2 xs={4} px={2}>
+        <Typography sx={{ mt: 2 }} variant="h4">
+          New Route
+        </Typography>
+        <form onSubmit={searchPlaces}>
+          <TextField
             id="source"
             type="text"
+            sx={{ mt: 2 }}
             defaultValue={
               "Simpsons - SHIGS 706 Bl. D, Loja 35 - Asa Sul, Brasilia - Federal District"
             }
-            placeholder="Start Location"
+            fullWidth
+            label="Start Location"
           />
-          <input
+          <TextField
             id="destination"
             type="text"
+            sx={{ mt: 2 }}
             defaultValue={
               "Brasília Shopping - Asa Norte, Brasilia - Federal District"
             }
-            placeholder="Destination"
+            fullWidth
+            label="Destination"
           />
-          <button id="submitBtn" type="submit">
+          <Button
+            variant="contained"
+            sx={{ mt: 1 }}
+            id="submitBtn"
+            fullWidth
+            type="submit"
+          >
             Search Route
-          </button>
+          </Button>
         </form>
         {directionsData && (
-          <ul>
-            <li>
-              <strong>Start Location</strong>:{" "}
-              {directionsData.routes[0].legs[0].start_address}
-            </li>
-            <li>
-              <strong>Destination</strong>:{" "}
-              {directionsData.routes[0].legs[0].end_address}
-            </li>
-            <li>
-              <button onClick={createRoute}>Create Route</button>
-            </li>
-          </ul>
+          <Card sx={{ mt: 1 }}>
+            <CardContent>
+              <List>
+                <ListItem>
+                  <ListItemText
+                    primary={"Start Location"}
+                    secondary={directionsData.routes[0].legs[0].start_address}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary={"Destination"}
+                    secondary={directionsData.routes[0].legs[0].end_address}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary={"Distance"}
+                    secondary={directionsData.routes[0].legs[0].distance.text}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary={"Duration"}
+                    secondary={directionsData.routes[0].legs[0].duration.text}
+                  />
+                </ListItem>
+              </List>
+            </CardContent>
+            <CardActions sx={{ display: "flex", justifyContent: "center" }}>
+              <Button type="button" variant="contained" onClick={createRoute}>
+                Create Route
+              </Button>
+            </CardActions>
+          </Card>
         )}
-      </div>
-      <div
-        id="map"
-        style={{
-          height: "100%",
-          width: "100%",
-        }}
-        ref={mapContainer}
-      ></div>
-    </div>
+      </Grid2>
+      <Grid2 id="map" xs={8} ref={mapContainer}></Grid2>
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={() => setOpen(false)}
+      >
+        <Alert onClose={() => setOpen(false)} severity="success">
+          Route registered successfully!
+        </Alert>
+      </Snackbar>
+    </Grid2>
   );
 }
