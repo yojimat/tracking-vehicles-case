@@ -21,6 +21,7 @@ import {
 import Grid2 from "@mui/material/Unstable_Grid2";
 import { useRef, useState } from "react";
 
+// TODO: Transform the snack bar in a component, and modify the logic to show the message correctly when something goes wrong.
 export default function NewRoutePage() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useMap(mapContainer);
@@ -38,8 +39,8 @@ export default function NewRoutePage() {
     const destination = form.destination.value;
 
     const [sourceResponse, destinationResponse] = await Promise.all([
-      fetch(`http://localhost:3000/places?text=${source}`),
-      fetch(`http://localhost:3000/places?text=${destination}`),
+      fetch(`http://localhost:3001/api/places?text=${source}`),
+      fetch(`http://localhost:3001/api/places?text=${destination}`),
     ]);
 
     const [sourcePlace, destinationPlace]: FindPlaceFromTextResponseData[] =
@@ -60,13 +61,15 @@ export default function NewRoutePage() {
     const destinationPlaceId = destinationPlace.candidates[0].place_id;
 
     const directionsResponse = await fetch(
-      `http://localhost:3000/directions?originId=${sourcePlaceId}&destinationId=${destinationPlaceId}`
+      `http://localhost:3001/api/directions?originId=${sourcePlaceId}&destinationId=${destinationPlaceId}`
     );
 
     const directionsData: DirectionsResponseData & { request: any } =
       await directionsResponse.json();
 
     setDirectionsData(directionsData);
+
+    map?.removeAllRoutes();
 
     await map?.addRouteWithIcons({
       routeId: "1",
@@ -90,7 +93,7 @@ export default function NewRoutePage() {
     const startAddress = directionsData!.routes[0].legs[0].start_address;
     const endAddress = directionsData!.routes[0].legs[0].end_address;
 
-    await fetch("http://localhost:3000/routes", {
+    await fetch("http://localhost:3001/api/routes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -101,7 +104,7 @@ export default function NewRoutePage() {
         destination_id: directionsData!.request.destination.place_id,
       }),
     });
-    setOpen(true)
+    setOpen(true);
     button?.removeAttribute("disabled");
   }
 

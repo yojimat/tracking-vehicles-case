@@ -1,0 +1,5 @@
+### Next.js proxy for caching API calls.
+GET http://localhost:3001/api/places?text=Simpsons - SHIGS 706 Bl. D, Loja 35 - Asa Sul, Brasilia - Federal District
+
+### Get directions between two places
+GET http://localhost:3001/api/directions?originId=ChIJlWcrdLg6WpMR9aiAqdCC11g&destinationId=ChIJbVO40fs6WpMRjLuC-AD-i4E

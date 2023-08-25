@@ -10,7 +10,7 @@ export const RouteSelect = (props: NativeSelectProps) => {
     data: routes,
     error,
     isLoading,
-  } = useSwr<Route[]>("http://localhost:3000/routes", fetcher, {
+  } = useSwr<Route[]>("http://localhost:3001/api/routes", fetcher, {
     fallbackData: [],
   });
 

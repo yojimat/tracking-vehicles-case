@@ -16,7 +16,7 @@ export default function AdminPage() {
       // On the second call of the socket, the variable map lose its reference to the map object.
       if (map && !map.hasRoute(data.route_id)) {
         const response = await fetch(
-          `http://localhost:3000/routes/${data.route_id}`
+          `http://localhost:3001/api/routes/${data.route_id}`
         );
         const route: Route = await response.json();
 
