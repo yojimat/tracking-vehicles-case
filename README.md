@@ -1,6 +1,5 @@
 # Case: Vehicles Tracking
-Projects in this repo create a vehicles tracking platform. The platform will be able to trace the vehicles in real time and store the trace in database.  
-The platform will also be able to provide the trace of vehicles to other applications.  
+Projects in this repo create a vehicles tracking platform. The platform will be able to trace the vehicles in real time and store the trace in the database.  
 It will calculate vehicles fares based on the distance that vehicles will travel.  
 If the projects had CI/CD they should have their own repositories. Therefore, they could be deployed independently, by git webhooks or other tools.
 
@@ -88,6 +87,16 @@ $ npm run test
 $ npm run test:e2e
 # test coverage
 $ npm run test:cov
+```
+### Apache Kafka
+The Apache Kafka is a message broker that will be used to send messages between the microservice and the API.
+
+#### Usage
+Using the Apache Kafka with Docker Compose:
+```bash
+cd kafka
+docker compose down # Run this command to clean files that may generate errors in the next command.
+docker compose up
 ```
 
 ### Vehicles Fares Microservice

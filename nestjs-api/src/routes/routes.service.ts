@@ -1,14 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRouteDto } from './dto/create-route.dto';
-import { UpdateRouteDto } from './dto/update-route.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DirectionsService } from 'src/maps/directions/directions.service';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @Injectable()
 export class RoutesService {
   constructor(
-    private prismaService: PrismaService,
-    private directionsService: DirectionsService,
+    private readonly prismaService: PrismaService,
+    private readonly directionsService: DirectionsService,
+    @InjectQueue('kafka-producer') private readonly kafkaProducerQueue: Queue,
   ) {}
 
   //TODO: Should verify if the route already exists instead of creating another one.
@@ -19,7 +21,7 @@ export class RoutesService {
         createRouteDto.destination_id,
       );
     const legs = routes[0].legs[0];
-    return this.prismaService.route.create({
+    const routeCreated = await this.prismaService.route.create({
       data: {
         name: createRouteDto.name,
         source: {
@@ -46,6 +48,13 @@ export class RoutesService {
         }),
       },
     });
+    await this.kafkaProducerQueue.add({
+      event: 'RouteCreated',
+      id: routeCreated.id,
+      name: routeCreated.name,
+      distance: routeCreated.distance,
+    });
+    return routeCreated;
   }
 
   findAll() {
@@ -58,13 +67,5 @@ export class RoutesService {
         id: id,
       },
     });
-  }
-
-  update(id: number, updateRouteDto: UpdateRouteDto) {
-    return `This action updates a #${id} route`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} route`;
   }
 }

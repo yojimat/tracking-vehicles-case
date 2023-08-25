@@ -5,16 +5,37 @@ import { MapsModule } from 'src/maps/maps.module';
 import { RoutesDriverService } from './routes-driver/routes-driver.service';
 import { RoutesWebsocketGateway } from './routes-websocket/routes-websocket.gateway';
 import { BullModule } from '@nestjs/bull';
-import NewPointsConsumer from './new-points.consumer';
+import NewPointsJob from './new-points.job';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import RouteKafkaProducerJob from './kafka-producer.job';
 
 @Module({
-  imports: [MapsModule, BullModule.registerQueue({ name: 'new-points' })],
+  imports: [
+    MapsModule,
+    BullModule.registerQueue(
+      { name: 'new-points' },
+      { name: 'kafka-producer' },
+    ),
+    ClientsModule.register([
+      {
+        name: 'KAFKA_SERVICE',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'nest',
+            brokers: ['127.0.0.1:9094'],
+          },
+        },
+      },
+    ]),
+  ],
   controllers: [RoutesController],
   providers: [
     RoutesService,
     RoutesDriverService,
     RoutesWebsocketGateway,
-    NewPointsConsumer,
+    NewPointsJob,
+    RouteKafkaProducerJob,
   ],
 })
 export class RoutesModule {}
