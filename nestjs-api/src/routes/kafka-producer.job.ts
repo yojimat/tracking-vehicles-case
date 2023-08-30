@@ -10,7 +10,7 @@ export default class RouteKafkaProducerJob {
     private readonly kafkaService: ClientKafka,
   ) {}
 
-  // TODO: Create type for this job.
+  // TODO: Create types for this job.
   @Process()
   handle(job: Job<any>) {
     this.kafkaService.emit('route', job.data);

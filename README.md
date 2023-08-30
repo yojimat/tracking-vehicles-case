@@ -90,6 +90,13 @@ $ npm run test:cov
 ```
 ### Apache Kafka
 The Apache Kafka is a message broker that will be used to send messages between the microservice and the API.
+#### Usage
+Using the Apache Kafka with Docker Compose:
+```bash
+cd kafka
+docker compose down # Run this command to clean files that may generate errors in the next command.
+docker compose up
+```
 
 #### Usage
 Using the Apache Kafka with Docker Compose:
@@ -102,8 +109,22 @@ docker compose up
 ### Vehicles Fares Microservice
 The microservice calculate the fares of vehicles based on the distance of the route, that the vehicles will travel.  
 
+#### Setup
+Commands used to bootstrap the project.  
+```bash
+mkdir go-microservice
+cd go-microservice
+go mod init github.com/yojimat/vehicles-tracking-case/go
+```
+
+#### Usage
+```bash
+cd go-microservice
+go run cmd/freight/main.go
+```
+
 ### Dashboards & System Metrics
-The dashboards are made by the application Grafana and the metrics collected by Prometheus.  
+The dashboards are made by the application Grafana and the metrics collected by Prometheus. To run these applications see the docker-compose.yml file outside of the projects. 
 
 ## Authors and acknowledgment
 Thanks to the professors of [full cycle course](https://github.com/devfullcycle/imersao14) that helped to create and bootstrap this project. 

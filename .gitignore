@@ -1,0 +1,5 @@
+docker
+mysql
+.docker/grafana_data/*
+.docker/prometheus/*
+!.docker/prometheus/prometheus.yml
